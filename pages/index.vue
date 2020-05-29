@@ -1,72 +1,95 @@
 <template>
-  <div class="container">
+  <div>
+    <button @click="parseHobby">趣味を生成</button>
     <div>
-      <logo />
-      <h1 class="title">
-        profile-generator
-      </h1>
-      <h2 class="subtitle">
-        My groovy Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <label>
+        <textarea
+          v-model="hobbyTextFull"
+          name="hobby"
+          :rows="hobbyTextFullRow"
+          :cols="40"
+        />
+      </label>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
-export default {
-  components: {
-    Logo
+  export default {
+    data () {
+      return {
+        hobbyTitle: '',
+        hobbyText: '',
+        // todo: 選択式にする
+        // todo: マスタ要るやん
+        hobby: [
+          'テニス',
+          'スノボ',
+          '旅行',
+          'お酒を飲むこと',
+        ],
+      }
+    },
+    computed: {
+      hobbyTextFull () {
+        return this.hobbyTitle + '\n' + this.hobbyText
+      },
+      hobbyTextFullRow () {
+        return this.hobbyTextFull.split('\n').length
+      },
+    },
+    methods: {
+      makeRandomNumber (min = 1, max = 10) {
+        return Math.floor(Math.random() * (max + 1 - min)) + min
+      },
+      makeHobbyTitle () {
+        let title = ''
+        switch (this.makeRandomNumber(1, 4)) {
+          case 1:
+            title = '好きなこと'
+            break
+          case 2:
+            title = '趣味'
+            break
+          case 3:
+            title = '【好きなこと】'
+            break
+          case 4:
+            title = '【趣味】'
+            break
+        }
+        return title
+      },
+      makeHobbyText () {
+        let text = ''
+        switch (this.makeRandomNumber(1, 4)) {
+          // 「、」で繋ぐ
+          case 1:
+            text = this.hobby.join('、')
+            break
+          // スラッシュで繋ぐ
+          case 2:
+            text = this.hobby.join('/')
+            break
+          // 「・%趣味%」で改行
+          case 3:
+            text = this.hobby.map((h, i) => {
+              return i + 1 !== this.hobby.length ? `・${h}` + '\n' : `・${h}`
+            }).join('')
+            break
+          // 「%趣味%や%趣味%や%趣味%などです。」
+          case 4:
+            text = this.hobby.map((h, i) => {
+              return i + 1 !== this.hobby.length ? `${h}や` : `${h}などです。`
+            }).join('')
+            break
+        }
+        return text
+      },
+      parseHobby () {
+        this.hobbyTitle = this.makeHobbyTitle()
+        this.hobbyText = this.makeHobbyText()
+      },
+    },
   }
-}
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

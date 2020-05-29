@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
   env: {
+    es6: true,
     browser: true,
     node: true
   },
@@ -8,10 +9,21 @@ module.exports = {
     parser: 'babel-eslint'
   },
   extends: [
-    '@nuxtjs',
+    "eslint:recommended",
+    "plugin:vue/recommended",
+    // '@nuxtjs',
     'plugin:nuxt/recommended'
   ],
-  // add your custom rules here
   rules: {
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "vue/no-v-html": 0,
+    "vue/max-attributes-per-line": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/component-name-in-template-casing": "off",
+    "vue/html-self-closing": "off",
+    "vue/html-closing-bracket-spacing": "off",
+    "vue/order-in-components": "off",
   }
 }
